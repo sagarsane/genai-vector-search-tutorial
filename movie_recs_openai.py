@@ -1,6 +1,7 @@
 import os
 import pymongo
-import openai
+from openai import OpenAI
+
 import requests
 from pprint import pprint
 
@@ -16,24 +17,17 @@ collection = db[mongo_collection]
 
 # Retrieve OpenAI API token from environment variable
 openAIApiKey = os.environ.get("OPENAI_API_KEY")
-
-embedding_url = "https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2"
-
+openAI_client = OpenAI(api_key=openAIApiKey)
 def generate_embedding(text: str) -> list[float]:
     """
     Generates an embedding for a given text using the OpenAI API
     """    
-    openai.api_key = openAIApiKey
-    response = openai.Embedding.create(
-        model="text-embedding-ada-002",
-        input=text
-    )
-    return response['data'][0]['embedding']
-    
+    response = openAI_client.embeddings.create(model="text-embedding-ada-002",
+    input=text)
+    return response.data[0].embedding
 
 
-
-query = "comedy characters from outer space at war. Not sensual."
+query = "imaginary action characters from outer space at war."
 
 results = collection.aggregate([
     {

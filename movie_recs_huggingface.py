@@ -49,4 +49,4 @@ results = collection.aggregate([
 ])
 
 for document in results:
-    pprint(f"Movie Name: {document['title']},\n Movie Plot: {document['plot']}\n")
+    print(f"Movie Name: {document['title']},\n Movie Plot: {document['plot']}\n")
